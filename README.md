@@ -16,4 +16,4 @@ Projects that have been developed in the Web Applications curricular unit at FCU
 <br>
 
 <img src="https://i.imgur.com/9tAdA4V.png">
-<img src="https://i.imgur.com/9tAdA4V.png">
+<img src="https://i.imgur.com/DcPxXTh.png">
