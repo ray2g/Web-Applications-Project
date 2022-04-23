@@ -2,9 +2,18 @@
 
 # Web-Application-Project
 
+Team:
+ * João Raimundo
+ * Jonathan Gehmayr
+ * Miguel Nunes
 
-Repository to compile all the projects that have been developed in the Adanved Machine Learning curricular unit at FCUL.
+Oriented by: Professor Pedro Antunes
+
+<br>
+
+Projects that have been developed in the Web Applications curricular unit at FCUL, with the following guidelines:
+
+<br>
 
 <img src="https://i.imgur.com/9tAdA4V.png">
-
-<img src="https://imgur.com/a/DwPuwdw">
+<img src="https://i.imgur.com/9tAdA4V.png">
