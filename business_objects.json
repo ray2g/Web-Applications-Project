@@ -1,0 +1,97 @@
+{
+  "Buildings":{
+    "type": "array",
+    "items": [
+      {
+	    "type": "object",
+		"properties": {
+		  "buildingID": { "type": "string" },
+		  "address": {"type": "string"},
+		  "supervisorUserID": {"type": "integer"}
+		  
+		}
+	  }
+    ]
+  },
+  "Materials": {
+	"type": "array",
+	"items": [
+	  {
+	    "type": "object",
+	    "properties": { 
+	      "materialID": {"type": "integer"},
+	      "name": {"type": "string"},
+	      "stock": {"type": "integer"},
+	      "providerName": {"type": "string"},
+	      "materialClass": {"type": "string"}
+		}
+	  }
+	]
+  },
+  "Jobs": {
+	"type": "array",
+	"items": [
+	  {
+		"type": "object",
+	    "properties": {
+	      "jobID": {"type": "integer"},
+	      "buildingID": {"type": "integer"},
+	      "jobType": {"type": "string"},
+	      "status": {"type": "string"},
+	      "startDate": {"type": "string"},
+	      "deadline": {"type": "string"},
+	      "endDate": {"type": "string"},
+	      "buildingFloor": {"type": "string"},
+	      "buildingRoom": {"type": "string"},
+	      "managerID": {"type": "integer"},
+	      "contractorIDs": {"type": "object"},
+	      "subcontractorIDs": {"type": "object"},
+	      "userIDs": {"type": "object"},
+	      "materialIDs": {"type": "object"}
+		}
+	  }
+	]
+  },
+  "Reports": {
+	"type": "array",
+	"items": [
+	  {
+	    "type": "object",
+	    "properties": {
+	      "reportID": {"type": "integer"},
+	      "jobID": {"type": "integer"},
+	      "userID": {"type": "integer"},
+	      "date": {"type": "string"},
+	      "content": {"type": "string"}
+		}
+	  }
+	]
+  },
+  "Users": {
+	"type": "array",
+	"items": [
+	  {
+	    "type": "object",
+	    "properties": {
+	      "userID": {"type": "integer"},
+	      "name": {"type": "string"},
+	      "role": {"type": "string"},
+	      "phone": {"type": "integer"},
+	      "address": {"type": "string"},
+	      "taxID": {"type": "integer"},
+	      "payment_number": {"type": "string"},
+	      "startDate": {"type": "string"},
+	      "endDate": {"type": "string"} 
+		}
+	  }
+	]
+  },	
+  "Chat": {
+	"type": "object",
+	"properties": {
+	  "jobID": {"type": "integer"},
+	  "userID": {"type": "integer"},
+	  "messages": {"type": "string"}
+	  }
+	}
+}

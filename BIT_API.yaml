@@ -1,0 +1,2255 @@
+openapi: "3.0.2"
+info:
+  title: Swagger Building Maintenance APP API
+  description: "Swagger file for Building Maintenance APP \n
+  
+                This is an API to help the  Building Inspection Team (BIT) of the Government \n
+                
+                
+                Web Aplications - 2021/2022 \n
+                
+                João Raimundo – Nº 57454  \n
+                Jonathan Gehmayr – 57267  \n
+                Miguel Nunes - 40790"
+                
+  version: "0.6.0"
+
+paths:
+  /buildings:
+    get:
+      tags:
+      - Buildings 
+      summary: "Get all buildings"
+      operationId: buildings.get_all
+      parameters:
+        - name: buildingID
+          in: query
+          description: The ID of a respective building
+          schema:
+            type: integer
+        - name: address
+          in: query
+          description: Address where the building is located
+          schema:
+            type: string
+        - name: supervisorUserID
+          in: query
+          description: The ID of the supervisor in this building
+          schema:
+            type: string
+            
+      responses:
+        "200":
+          description: "Buildings found successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Buildings'
+                
+        "404":
+          description: "Error: No buildings were found"
+          content:
+            text/plain:
+              schema:
+                title: No buildings were found
+                type: string
+
+        "500":
+          description: "Internal Server Error: No Buildings Found"
+          content:
+            text/plain:
+              schema:
+                title: No buildings available
+                type: string
+
+    post:
+      tags:
+      - Buildings
+      summary: "Add a new building"
+      operationId: Buildings.add_one
+      parameters:
+        - name: buildingID
+          in: query
+          required: True
+          description: The ID of a respective building
+          schema:
+            type: integer
+        - name: address
+          in: query
+          required: True
+          description: Address where the building is located
+          schema:
+            type: string
+        - name: supervisorUserID
+          in: query
+          required: True
+          description: The ID of the supervisor in this building
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Building added successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Building'
+        "404":
+          description: "Error: Could not add the building"
+          content:
+            text/plain:
+              schema:
+                title: Could not add the building
+                type: string
+        "500":
+          description: "Internal Server Error: Building not added"
+          content:
+            text/plain:
+              schema:
+                title: Building not added
+                type: string
+
+                
+  /buildings/{buildingID}:
+      get:
+        tags:
+        - Buildings
+        summary: "Show the details of a specific building"
+        operationId: buildings.get_one
+        parameters:
+          - name: buildingID
+            in: path
+            required: True
+            description: The ID of a respective building
+            schema:
+              type: integer
+          - name: address
+            in: query
+            description: Address where the building is located
+            schema:
+              type: string
+          - name: supervisorUserID
+            in: query
+            description: The ID of the supervisor in this building
+            schema:
+              type: string
+            
+        responses:
+          "200":
+            description: "Building found successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Building'
+          "404":
+            description: "Error: No building were found for the respective ID"
+            content:
+              text/plain:
+                schema:
+                  title: Building not found
+                  type: string
+          "500":
+            description: "Internal Server Error: No Buildings found"
+            content:
+              text/plain:
+                schema:
+                  title: No buildings available
+                  type: string
+
+      put:
+        tags:
+        - Buildings
+        summary: "Update the details of a specific building"
+        operationId: Buildings.update_one
+        parameters:
+          - name: buildingID
+            required: True
+            in: path
+            description: The ID of a respective building
+            schema:
+              type: integer
+          - name: address
+            in: query
+            description: Address where the building is located
+            schema:
+              type: string
+          - name: supervisorUserID
+            in: query
+            description: The ID of the supervisor in this building
+            schema:
+              type: string
+        responses:
+          "200":
+            description: "Building added sucessfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Building'
+          "404":
+            description: "Error: Could not add the building"
+            content:
+              text/plain:
+                schema:
+                  title: Could not add the building
+                  type: string
+          "500":
+            description: "Internal Server Error: Building not added"
+            content:
+              text/plain:
+                schema:
+                  title: Building not added
+                  type: string
+                
+      delete: 
+          tags:
+          - Buildings
+          summary: "Delete a building by ID"
+          operationId: Buildings.delete_one
+          parameters:
+            - name: buildingID
+              in: path
+              required: True
+              description: The ID of a respective building
+              schema:
+                type: integer
+                
+          responses:
+            "200":
+              description: "Building Deleted Sucessfully!"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Building'
+            "404":
+              description: "Error: Could not delete the building"
+              content:
+                text/plain:
+                  schema:
+                    title: Could not delete the building
+                    type: string
+            "500":
+              description: "Internal Server Error: Building not deleted"
+              content:
+                text/plain:
+                  schema:
+                    title: Building not deleted
+                    type: string
+
+  /jobs:
+      get:
+        tags:
+        - Jobs 
+        summary: "Get all jobs"
+        operationId: jobs.get_all
+        parameters:
+          - name: jobID
+            in: query
+            description: The ID of a respective job
+            schema:
+              type: integer  
+          - name: buildingID
+            in: query
+            description: The ID of a respective building
+            schema:
+              type: integer
+          - name: jobType
+            in: query
+            description: Describes the type of work that are being performed in the job
+            schema:
+              type: string               
+          - name: status
+            in: query
+            description: Status of the job
+            example: openJobs / scheduledJobs / ongoingJobs /doneJobs / closedJobs
+            schema:
+              type: string
+          - name: startDate
+            in: query
+            description: Date and hour that the job started
+            schema:
+              type: string   
+              format: date-time
+          - name: deadline
+            in: query
+            description: Estimated date for the job to be completed  
+            schema:
+              type: string   
+              format: date-time
+          - name: endDate
+            in: query
+            description: Date and hour that the job ended   
+            schema:
+              type: string   
+              format: date-time
+          - name: buildingFloor
+            in: query
+            description: Describes in which floor of the building the job are being performed 
+            example: 3rd Floor
+            schema:
+              type: string
+          - name: buildingRoom
+            in: query
+            description: Describes in which room in a specific floor of the building the job are being performed
+            example: Kitchen
+            schema:
+              type: string       
+          - name: managerID
+            in: query
+            description: The ID of the job manager  
+            schema:
+              type: integer    
+          - name: contractorIDs
+            in: query
+            description: List of contractors user IDs working in this job 
+            schema:
+              type: object 
+          - name: subcontractorIDs
+            in: query
+            description: List of subcontractors user IDs working in this job
+            schema:
+              type: object 
+          - name: userIDs
+            in: query
+            description: List of workers user IDs working in this job  
+            schema:
+              type: object 
+          - name: materialIDs
+            in: query
+            description: List of materials used in this job  
+            schema:
+              type: object
+              
+        responses:
+          "200":
+            description: "Jobs found sucessfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Jobs'
+          "404":
+            description: "Error: No jobs were found"
+            content:
+              text/plain:
+                schema:
+                  title: Jobs not found
+                  type: string
+          "500":
+            description: "Internal Server Error: No jobs found"
+            content:
+              text/plain:
+                schema:
+                  title: No jobs available
+                  type: string
+
+
+  /jobs/{buildingID}:
+        get:
+          tags:
+          - Jobs 
+          summary: "Get all jobs of a specific building"
+          operationId: jobsID.get_building_all
+          parameters:
+            - name: jobID
+              in: query
+              description: The ID of a respective job
+              schema:
+                type: integer  
+            - name: buildingID
+              in: path
+              required: True
+              description: The ID of a respective building
+              schema:
+                type: integer
+            - name: jobType
+              in: query
+              description: Describes the type of work that are being performed in the job
+              schema:
+                type: string               
+            - name: status
+              in: query
+              description: Status of the job
+              example: openJobs / scheduledJobs / ongoingJobs /doneJobs / closedJobs
+              schema:
+                type: string
+            - name: startDate
+              in: query
+              description: Date and hour that the job started
+              schema:
+                type: string   
+                format: date-time
+            - name: deadline
+              in: query
+              description: Estimated date for the job to be completed  
+              schema:
+                type: string   
+                format: date-time
+            - name: endDate
+              in: query
+              description: Date and hour that the job ended   
+              schema:
+                type: string   
+                format: date-time
+            - name: buildingFloor
+              in: query
+              description: Describes in which floor of the building the job are being performed 
+              example: 3rd Floor
+              schema:
+                type: string
+            - name: buildingRoom
+              in: query
+              description: Describes in which room in a specific floor of the building the job are being performed
+              example: Kitchen
+              schema:
+                type: string       
+            - name: managerID
+              in: query
+              description: The ID of the job manager  
+              schema:
+                type: integer    
+            - name: contractorIDs
+              in: query
+              description: List of contractors user IDs working in this job 
+              schema:
+                type: object 
+            - name: subcontractorIDs
+              in: query
+              description: List of subcontractors user IDs working in this job
+              schema:
+                type: object 
+            - name: userIDs
+              in: query
+              description: List of workers user IDs working in this job  
+              schema:
+                type: object 
+            - name: materialIDs
+              in: query
+              description: List of materials used in this job  
+              schema:
+                type: object
+                
+          responses:
+            "200":
+              description: "The specific job for the correspondent building ID were found successfully!"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Job'
+            "404":
+              description: "Error: Job not found for the specific building ID"
+              content:
+                text/plain:
+                  schema:
+                    title: Jobs not found
+                    type: string
+            "500":
+              description: "Internal Server Error: Job not found for the specific building ID"
+              content:
+                text/plain:
+                  schema:
+                    title: No jobs available
+                    type: string
+                  
+
+  /jobs/{buildingID}/{jobID}:
+      get:
+        tags:
+        - Jobs 
+        summary: "Get a job of a specific building"
+        operationId: jobsID.get_one
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of a respective job
+            schema:
+              type: integer  
+          - name: buildingID
+            in: path
+            required: True
+            description: The ID of a respective building
+            schema:
+              type: integer
+          - name: jobType
+            in: query
+            description: Describes the type of work that are being performed in the job
+            schema:
+              type: string               
+          - name: status
+            in: query
+            description: Status of the job
+            example: openJobs / scheduledJobs / ongoingJobs /doneJobs / closedJobs
+            schema:
+              type: string
+          - name: startDate
+            in: query
+            description: Date and hour that the job started
+            schema:
+              type: string   
+              format: date-time
+          - name: deadline
+            in: query
+            description: Estimated date for the job to be completed  
+            schema:
+              type: string   
+              format: date-time
+          - name: endDate
+            in: query
+            description: Date and hour that the job ended   
+            schema:
+              type: string   
+              format: date-time
+          - name: buildingFloor
+            in: query
+            description: Describes in which floor of the building the job are being performed 
+            example: 3rd Floor
+            schema:
+              type: string
+          - name: buildingRoom
+            in: query
+            description: Describes in which room in a specific floor of the building the job are being performed
+            example: Kitchen
+            schema:
+              type: string       
+          - name: managerID
+            in: query
+            description: The ID of the job manager  
+            schema:
+              type: integer    
+          - name: contractorIDs
+            in: query
+            description: List of contractors user IDs working in this job 
+            schema:
+              type: object 
+          - name: subcontractorIDs
+            in: query
+            description: List of subcontractors user IDs working in this job
+            schema:
+              type: object 
+          - name: userIDs
+            in: query
+            description: List of workers user IDs working in this job  
+            schema:
+              type: object 
+          - name: materialIDs
+            in: query
+            description: List of materials used in this job  
+            schema:
+              type: object
+              
+        responses:
+          "200":
+            description: "The specific job for the correspondent building ID were found successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Job'
+          "404":
+            description: "Error: Job not found for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: Jobs not found
+                  type: string
+          "500":
+            description: "Internal Server Error: Job not found for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: No jobs available
+                  type: string
+
+      post:
+        tags:
+        - Jobs 
+        summary: "Add a new job for a specific building"
+        operationId: buildings_jobs.add_one
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of a respective job
+            schema:
+              type: integer  
+          - name: buildingID
+            in: path
+            required: True
+            description: The ID of a respective building
+            schema:
+              type: integer
+          - name: jobType
+            in: query
+            required: True            
+            description: Describes the type of work that are being performed in the job
+            schema:
+              type: string               
+          - name: status
+            in: query
+            required: True            
+            description: Status of the job
+            example: openJobs / scheduledJobs / ongoingJobs /doneJobs / closedJobs
+            schema:
+              type: string
+          - name: startDate
+            in: query
+            required: True            
+            description: Date and hour that the job started
+            schema:
+              type: string   
+              format: date-time
+          - name: deadline
+            in: query
+            description: Estimated date for the job to be completed  
+            schema:
+              type: string   
+              format: date-time
+          - name: endDate
+            in: query
+            description: Date and hour that the job ended   
+            schema:
+              type: string   
+              format: date-time
+          - name: buildingFloor
+            in: query
+            required: True            
+            description: Describes in which floor of the building the job are being performed 
+            example: 3rd Floor
+            schema:
+              type: string
+          - name: buildingRoom
+            in: query
+            required: True            
+            description: Describes in which room in a specific floor of the building the job are being performed
+            example: Kitchen
+            schema:
+              type: string       
+          - name: managerID
+            in: query
+            required: True            
+            description: The ID of the job manager  
+            schema:
+              type: integer    
+          - name: contractorIDs
+            in: query
+            description: List of contractors user IDs working in this job 
+            schema:
+              type: object 
+          - name: subcontractorIDs
+            in: query
+            description: List of subcontractors user IDs working in this job
+            schema:
+              type: object 
+          - name: userIDs
+            in: query
+            description: List of workers user IDs working in this job  
+            schema:
+              type: object 
+          - name: materialIDs
+            in: query
+            description: List of materials used in this job  
+            schema:
+              type: object
+              
+        responses:
+          "200":
+            description: "The specific job for the correspondent building ID were added successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Job'
+          "404":
+            description: "Error: Could not add a job for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: Job not added
+                  type: string
+          "500":
+            description: "Internal Server Error: Job not added for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: Job not added
+                  type: string
+
+      put:
+        tags:
+        - Jobs
+        summary: "Update a job of a specific building"
+        operationId: buildings_jobs.update_one
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of a respective job
+            schema:
+              type: integer  
+          - name: buildingID
+            in: path
+            required: True            
+            description: The ID of a respective building
+            schema:
+              type: integer
+          - name: jobType
+            in: query
+            description: Describes the type of work that are being performed in the job
+            schema:
+              type: string               
+          - name: status
+            in: query
+            description: Status of the job
+            example: openJobs / scheduledJobs / ongoingJobs /doneJobs / closedJobs
+            schema:
+              type: string
+          - name: startDate
+            in: query
+            description: Date and hour that the job started
+            schema:
+              type: string   
+              format: date-time
+          - name: deadline
+            in: query
+            description: Estimated date for the job to be completed  
+            schema:
+              type: string   
+              format: date-time
+          - name: endDate
+            in: query
+            description: Date and hour that the job ended   
+            schema:
+              type: string   
+              format: date-time
+          - name: buildingFloor
+            in: query
+            description: Describes in which floor of the building the job are being performed 
+            example: 3rd Floor
+            schema:
+              type: string
+          - name: buildingRoom
+            in: query
+            description: Describes in which room in a specific floor of the building the job are being performed
+            example: Kitchen
+            schema:
+              type: string       
+          - name: managerID
+            in: query
+            description: The ID of the job manager  
+            schema:
+              type: integer    
+          - name: contractorIDs
+            in: query
+            description: List of contractors user IDs working in this job 
+            schema:
+              type: object 
+          - name: subcontractorIDs
+            in: query
+            description: List of subcontractors user IDs working in this job
+            schema:
+              type: object 
+          - name: userIDs
+            in: query
+            description: List of workers user IDs working in this job  
+            schema:
+              type: object 
+          - name: materialIDs
+            in: query
+            description: List of materials used in this job  
+            schema:
+              type: object
+              
+        responses:
+          "200":
+            description: "The specific job for the correspondent building ID were updated successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Job'
+          "404":
+            description: "Error: Could not update a job for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: Job not updated
+                  type: string
+          "500":
+            description: "Internal Server Error: Job not updated for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: Job not updated
+                  type: string
+
+      delete:
+        tags:
+        - Jobs 
+        summary: "Delete a job of a specific building"
+        operationId: buildings_jobs.delete_one
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of a respective job
+            schema:
+              type: integer  
+          - name: buildingID
+            in: path
+            required: True
+            description: The ID of a respective building
+            schema:
+              type: integer
+
+        responses:
+          "200":
+            description: "The specific job for the correspondent building ID were deleted successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Job'
+          "404":
+            description: "Error: Could not delete a job for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: Job not deleted
+                  type: string
+          "500":
+            description: "Internal Server Error: Job not deleted for the specific building ID"
+            content:
+              text/plain:
+                schema:
+                  title: Job not deleted
+                  type: string                  
+  /materials:
+    get:
+      tags:
+      - Materials 
+      summary: "Get all materials"
+      operationId: materials.get_all
+      parameters:
+        - name: materialID
+          in: query
+          description: The ID of a respective material
+          schema:
+            type: integer  
+        - name: name
+          in: query
+          description: Material name
+          schema:
+            type: string 
+        - name: stock
+          in: query
+          description: Number of stock
+          schema:
+            type: integer
+        - name: providerName
+          in: query
+          description: Organization that provides the materials
+          schema:
+            type: string
+        - name: materialClass
+          in: query
+          description: The type of material class
+          example: Painting / Electricity / Construction 
+          schema:
+            type: string    
+            
+      responses:
+        "200":
+          description: "Materials found successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Materials'
+                
+        "404":
+          description: "Error: No materials were found"
+          content:
+            text/plain:
+              schema:
+                title: No materials were found
+                type: string
+
+        "500":
+          description: "Internal Server Error: No materials found"
+          content:
+            text/plain:
+              schema:
+                title: No materials available
+                type: string
+  
+ 
+  /materials/{materialClass}:
+    get:
+      tags:
+      - Materials 
+      summary: "Get all materials of a specific class"
+      operationId: materials.get_all_type
+      parameters:
+        - name: materialID
+          in: query
+          description: The ID of a respective material
+          schema:
+            type: integer  
+        - name: name
+          in: query
+          description: Material name
+          schema:
+            type: string 
+        - name: stock
+          in: query
+          description: Number of stock
+          schema:
+            type: integer
+        - name: providerName
+          in: query
+          description: Organization that provides the materials
+          schema:
+            type: string
+        - name: materialClass
+          in: path
+          required: True
+          description: The type of material class
+          example: Painting / Electricity / Construction 
+          schema:
+            type: string    
+            
+      responses:
+        "200":
+          description: "Materials found successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Materials'
+                
+        "404":
+          description: "Error: No materials were found"
+          content:
+            text/plain:
+              schema:
+                title: No materials were found
+                type: string
+
+        "500":
+          description: "Internal Server Error: No materials found"
+          content:
+            text/plain:
+              schema:
+                title: No materials available
+                type: string 
+  
+  
+  /materials/{materialID}:
+      get:
+        tags:
+        - Materials
+        summary: "Show the details of a specific material"
+        operationId: materials.get_one
+        parameters:
+          - name: materialID
+            in: path
+            required: True
+            description: The ID of a respective material
+            schema:
+              type: integer
+            
+        responses:
+          "200":
+            description: "Material found successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Material'
+          "404":
+            description: "Error: No material was found for the respective ID"
+            content:
+              text/plain:
+                schema:
+                  title: Material not found
+                  type: string
+          "500":
+            description: "Internal Server Error: No material found"
+            content:
+              text/plain:
+                schema:
+                  title: No material available
+                  type: string
+
+      post:
+        tags:
+        - Materials 
+        summary: "Add a new material by ID"
+        operationId: materials.add_one
+        parameters:
+          - name: materialID
+            in: path
+            required: True
+            description: The ID of a respective material
+            schema:
+              type: integer  
+          - name: name
+            in: query
+            required: True
+            description: Material name
+            schema:
+              type: string 
+          - name: stock
+            in: query
+            description: Number of stock
+            schema:
+              type: integer
+          - name: providerName
+            in: query
+            description: Organization that provides the materials
+            schema:
+              type: string
+          - name: materialClass
+            in: query
+            required: True            
+            description: The type of material class
+            example: Painting / Electricity / Construction 
+            schema:
+              type: string               
+          
+        responses:
+          "200":
+            description: "The material was added successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Material'
+          "404":
+            description: "Error: Could not add the material"
+            content:
+              text/plain:
+                schema:
+                  title: Material not added
+                  type: string
+          "500":
+            description: "Internal Server Error: Material not added"
+            content:
+              text/plain:
+                schema:
+                  title: Material not added
+                  type: string
+
+
+
+      put:
+        tags:
+        - Materials
+        summary: "Update the details of a material by ID"
+        operationId: materials.update_one
+        parameters:
+          - name: materialID
+            required: True
+            in: path
+            description: The ID of a respective material
+            schema:
+              type: integer
+          - name: name
+            in: query
+            description: Material name
+            schema:
+              type: string 
+          - name: stock
+            in: query
+            description: Number of stock
+            schema:
+              type: integer
+          - name: providerName
+            in: query
+            description: Organization that provides the materials
+            schema:
+              type: string
+          - name: materialClass
+            in: query
+            description: The type of material class
+            schema:
+              type: string
+              
+        responses:
+          "200":
+            description: "Material updated sucessfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Material'
+          "404":
+            description: "Error: Could not update the material"
+            content:
+              text/plain:
+                schema:
+                  title: Could not update the material
+                  type: string
+          "500":
+            description: "Internal Server Error: Material not updated"
+            content:
+              text/plain:
+                schema:
+                  title: Material not updated
+                  type: string
+                
+      delete: 
+          tags:
+          - Materials
+          summary: "Delete a material by ID"
+          operationId: Materials.delete_one
+          parameters:
+            - name: materialID
+              in: path
+              required: True
+              description: The ID of a respective material
+              schema:
+                type: integer
+                
+          responses:
+            "200":
+              description: "Material Deleted Sucessfully!"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Material'
+            "404":
+              description: "Error: Could not delete the material"
+              content:
+                text/plain:
+                  schema:
+                    title: Could not delete the material
+                    type: string
+            "500":
+              description: "Internal Server Error: Material not deleted"
+              content:
+                text/plain:
+                  schema:
+                    title: Material not deleted
+                    type: string
+
+
+  /users:
+    get:
+      tags:
+      - Users
+      summary: "Get all users"
+      operationId: users.get_all
+      parameters:
+      - name: userID
+        in: query
+        description: The ID of the respective user to be added
+        schema:
+          type: integer
+      - name: name
+        in: query
+        description: The name of the respective user to be added
+        schema:
+          type: string
+      - name: jobRole
+        in: query
+        description: The job role of the respective user to be added
+        example: Supervisor / Manager / Inspector
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: The phone number of the respective user to be added
+        schema:
+          type: integer  
+      - name: address
+        in: query
+        description: The address of the respective user to be added
+        schema:
+          type: string      
+      - name: taxID
+        in: query
+        description: The taxpayer identification number of the respective user to be added
+        schema:
+          type: integer    
+      - name: payment_number
+        in: query
+        description: The payment card number of the respective user to be added
+        schema:
+          type: integer    
+      - name: stardDate
+        in: query
+        description: The date of start working as BIT of the respective user to be added
+        schema:
+          type: string       
+      - name: endDate
+        in: query
+        description: The date of end working as BIT of the respective user to be added
+        schema:
+          type: string  
+          
+      responses:
+        "200":
+          description: "Users found successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+                
+        "404":
+          description: "Error: No users were found"
+          content:
+            text/plain:
+              schema:
+                title: No users were found
+                type: string
+
+        "500":
+          description: "Internal Server Error: No users found"
+          content:
+            text/plain:
+              schema:
+                title: No users available
+                type: string
+
+
+  /users/{userID}:
+    
+    get:
+      tags:
+      - Users
+      summary: "Show the details of a user by ID"
+      operationId: users.get_one
+      parameters:
+      - name: userID
+        in: path
+        description: The ID of the respective user
+        required: true
+        schema:
+          type: integer
+          
+      responses:
+        "200":
+          description: "User found successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: "Error: No user was found for the respective ID"
+          content:
+            text/plain:
+              schema:
+                title: User not found
+                type: string
+        "500":
+          description: "Internal Server Error: No user found"
+          content:
+            text/plain:
+              schema:
+                title: No user available
+                type: string
+    
+    
+    post:
+      tags:
+      - Users
+      summary: "Add a new user"
+      operationId: users.add_one
+      parameters:
+      - name: userID
+        in: path
+        description: The ID of the respective user to be added
+        required: true
+        schema:
+          type: integer
+      - name: name
+        in: query
+        description: The name of the respective user to be added
+        required: true
+        schema:
+          type: string
+      - name: jobRole
+        in: query
+        description: The job role of the respective user to be added
+        example: Supervisor / Manager / Inspector
+        required: true
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: The phone number of the respective user to be added
+        schema:
+          type: integer  
+      - name: address
+        in: query
+        description: The address of the respective user to be added
+        schema:
+          type: string      
+      - name: taxID
+        in: query
+        description: The taxpayer identification number of the respective user to be added
+        schema:
+          type: integer    
+      - name: payment_number
+        in: query
+        description: The payment card number of the respective user to be added
+        schema:
+          type: integer    
+      - name: stardDate
+        in: query
+        description: The date of start working as BIT of the respective user to be added
+        schema:
+          type: string       
+      - name: endDate
+        in: query
+        description: The date of end working as BIT of the respective user to be added
+        schema:
+          type: string     
+          
+      responses:
+        "200":
+          description: "User created successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: "Error: Could not add the user"
+          content:
+            text/plain:
+              schema:
+                title: Could not add the user
+                type: string
+        "500":
+          description: "Internal Server Error: User not added"
+          content:
+            text/plain:
+              schema:
+                title: User not added
+                type: string  
+    
+    put:
+      tags:
+      - Users
+      summary: "Update the details of a user by ID"
+      operationId: users.update_one
+      parameters:
+      - name: userID
+        in: path
+        description: The ID of the respective user to be updated
+        required: true
+        schema:
+          type: integer
+          
+      responses:
+        "200":
+          description: "User updated successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: "Error: Could not update the user"
+          content:
+            text/plain:
+              schema:
+                title: Could not update the user
+                type: string
+        "500":
+          description: "Internal Server Error: User not updated"
+          content:
+            text/plain:
+              schema:
+                title: User not updated
+                type: string  
+    
+    
+    delete:
+      tags:
+      - Users
+      summary: "Delete a user by ID"
+      operationId: users.delete_one
+      parameters:
+      - name: userID
+        in: path
+        description: The ID of the respective user to be deleted
+        required: true
+        schema:
+          type: integer
+          
+      responses:
+        "200":
+          description: "User deleted successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: "Error: Could not delete the user"
+          content:
+            text/plain:
+              schema:
+                title: Could not delete the user
+                type: string
+        "500":
+          description: "Internal Server Error: User not deleted"
+          content:
+            text/plain:
+              schema:
+                title: User not deleted
+                type: string  
+    
+
+
+                  
+  /authentication:
+    post:
+      tags:
+      - Authentication
+      summary: "Add a new user to the authentication list"
+      operationId: Authentication.add_one
+      parameters:
+        - name: userID
+          in: query
+          required: True
+          description: The ID of the user to add to the list
+          schema:
+            type: integer
+        - name: password
+          in: query
+          required: True
+          description: The password of the user to add to the list
+          schema:
+            type: string
+        - name: email
+          in: query
+          required: True
+          description: The email of the user to add to the list
+          schema:
+            type: string
+        - name: phone number
+          in: query
+          description: The phone number of the user to add to the list
+          schema:
+            type: integer
+      
+      responses:
+        "200":
+          description: "User added successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Authentication'
+        "404":
+          description: "Error: Could not add the user"
+          content:
+            text/plain:
+              schema:
+                title: Could not add the user
+                type: string
+        "500":
+          description: "Internal Server Error: User not added"
+          content:
+            text/plain:
+              schema:
+                title: User not added
+                type: string
+  
+  
+  /authentication/{userID}:  
+    get:
+        tags:
+        - Authentication
+        summary: "Show the authentication details of a specific user"
+        operationId: authentication.get_one
+        parameters:
+          - name: userID
+            in: path
+            required: True
+            description: The ID of the respective user that is registed
+            schema:
+              type: integer
+        responses:
+          "200":
+            description: "User found successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Authentication'
+          "404":
+            description: "Error: No user was found for the respective ID"
+            content:
+              text/plain:
+                schema:
+                  title: User not found
+                  type: string
+          "500":
+            description: "Internal Server Error: No user found"
+            content:
+              text/plain:
+                schema:
+                  title: No user available
+                  type: string
+    
+    put:
+        tags:
+        - Authentication
+        summary: "Update the authentication credentials of a specific user"
+        operationId: authentication.update_one
+        parameters:
+          - name: userID
+            required: True
+            in: path
+            description: The ID of the respective user that is going to be updated
+            schema:
+              type: integer
+          - name: password
+            in: query
+            description: The new password to be updated on this specific user
+            schema:
+              type: string
+          - name: email
+            in: query
+            description: The new email to be updated on this specific user
+            schema:
+              type: string
+          - name: phone number
+            in: query
+            description: The new phone number to be updated on this specific user
+            schema:
+              type: integer
+        
+        responses:
+          "200":
+            description: "User authentication information updated sucessfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Authentication'
+          "404":
+            description: "Error: Could not update the users authentication information"
+            content:
+              text/plain:
+                schema:
+                  title: Could not update the authentication information of the user
+                  type: string
+          "500":
+            description: "Internal Server Error: User authentication information not updated"
+            content:
+              text/plain:
+                schema:
+                  title: User authentication information not updated
+                  type: string    
+    
+    delete:
+      tags:
+      - Authentication
+      summary: "Delete a user from the authentication list"
+      operationId: authentication.delete_one
+      parameters:
+          - name: userID
+            in: path
+            required: True
+            description: The ID of the user that will be deleted
+            schema:
+              type: integer
+      
+      responses:
+          "200":
+            description: "User deleted successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Authentication'
+          "404":
+            description: "Error: No user was found for the respective ID"
+            content:
+              text/plain:
+                schema:
+                  title: User not found
+                  type: string
+          "500":
+            description: "Internal Server Error: No user found"
+            content:
+              text/plain:
+                schema:
+                  title: No user available
+                  type: string
+    
+            
+  /reports: 
+    get:
+      tags:
+      - Reports 
+      summary: "Get all reports"
+      operationId: reports.get_all
+      parameters:
+        - name: jobID
+          in: query
+          description: The ID of the respective job
+          schema:
+            type: integer
+        - name: reportID
+          in: query
+          description: The ID of the report that is being created
+          schema:
+            type: integer
+        - name: userID
+          in: query
+          description: The ID of the user that will write the report
+          schema:
+            type: integer
+        - name: date
+          in: query
+          description: Date and hour of the reportID created
+          schema:
+            type: string   
+            format: date-time
+            
+      responses:
+        "200":
+          description: "List of job IDs found successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reports'
+                
+        "404":
+          description: "Error: No job IDs were found"
+          content:
+            text/plain:
+              schema:
+                title: No job IDs found
+                type: string
+                
+        "500":
+          description: "Internal Server Error: No job IDs found"
+          content:
+            text/plain:
+              schema:
+                title: No job IDs available
+                type: string
+
+  
+  
+  /reports/{jobID}:  
+    get:
+        tags:
+        - Reports
+        summary: "Get the reports of a specific job ID"
+        operationId: reports/jobID.get_all
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of the respective job
+            schema:
+              type: integer
+        
+        responses:
+          "200":
+            description: "Job reports found successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Report'
+          "404":
+            description: "Error: No job reports found for the respective ID"
+            content:
+              text/plain:
+                schema:
+                  title: Job reports not found
+                  type: string
+          "500":
+            description: "Internal Server Error: No job reports found"
+            content:
+              text/plain:
+                schema:
+                  title: No job reports available
+                  type: string
+          
+  
+  /reports/{jobID}/{reportID}:    
+    
+    get:
+        tags:
+        - Reports
+        summary: "Get the details of a specific job report"
+        operationId: reports_jobID.get_one
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of the respective job
+            schema:
+              type: integer
+          - name: reportID
+            in: path
+            required: True
+            description: The ID of the report that is being created
+            schema:
+              type: integer
+              
+        responses:
+          "200":
+            description: "Job report found successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Report'
+          "404":
+            description: "Error: Could not find the job report"
+            content:
+              text/plain:
+                schema:
+                  title: Could not find the job report
+                  type: string
+          "500":
+            description: "Internal Server Error: Job report not found"
+            content:
+              text/plain:
+                schema:
+                  title: Job report not found
+                  type: string
+    
+    
+    
+    post:
+        tags:
+        - Reports
+        summary: "Create a new report for a specific job"
+        operationId: reports_jobID.add_one
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of the respective job
+            schema:
+              type: integer
+          - name: reportID
+            in: path
+            required: True
+            description: The ID of the report that is being created
+            schema:
+              type: integer
+          - name: userID
+            in: query
+            required: True
+            description: The ID of the user that will write the report
+            schema:
+              type: integer
+          - name: date
+            in: query
+            required: True
+            description: Date and hour of the reportID created
+            schema:
+              type: string   
+              format: date-time
+          - name: content
+            in: query
+            required: True
+            description: The content that is going to be written on the specific report ID
+            schema:
+              type: string
+              
+        responses:
+          "200":
+            description: "Job report created successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Report'
+          "404":
+            description: "Error: Could not add the job report"
+            content:
+              text/plain:
+                schema:
+                  title: Could not add the job report
+                  type: string
+          "500":
+            description: "Internal Server Error: Job report not added"
+            content:
+              text/plain:
+                schema:
+                  title: Job report not added
+                  type: string
+                  
+    put:
+        tags:
+        - Reports
+        summary: "Update a specific job report"
+        operationId: reports_jobID.update_one
+        parameters:
+          - name: jobID
+            in: path
+            required: True
+            description: The ID of the respective job
+            schema:
+              type: integer
+          - name: reportID
+            in: path
+            required: True
+            description: The ID of the report that is being created
+            schema:
+              type: integer
+          - name: userID
+            in: query
+            required: True
+            description: The ID of the user that will write the report
+            schema:
+              type: integer
+          - name: date
+            in: query
+            required: True
+            description: Date and hour of the reportID created
+            schema:
+              type: string   
+              format: date-time
+          - name: content
+            in: query
+            description: The content that is going to be written on the specific report ID
+            schema:
+              type: string
+              
+        responses:
+          "200":
+            description: "Job report updated successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Report'
+          "404":
+            description: "Error: Could not update the job report"
+            content:
+              text/plain:
+                schema:
+                  title: Could not update the job report
+                  type: string
+          "500":
+            description: "Internal Server Error: Job report not updated"
+            content:
+              text/plain:
+                schema:
+                  title: Job report not updated
+                  type: string
+
+    delete:
+        tags:
+        - Reports
+        summary: "Delete a specific job report"
+        operationId: reports_jobID.delete_one
+        parameters:
+          - name: jobID
+            required: True
+            in: path
+            description: The ID of the respective job
+            schema:
+              type: integer
+          - name: reportID
+            required: True
+            in: path
+            description: The ID of the respective job report that is going to be updated
+            schema:
+              type: integer
+              
+        responses:
+          "200":
+            description: "Job report deleted successfully!"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Report'
+          "404":
+            description: "Error: Could not delete the job report"
+            content:
+              text/plain:
+                schema:
+                  title: Could not delete the job report
+                  type: string
+          "500":
+            description: "Internal Server Error: Job report not deleted"
+            content:
+              text/plain:
+                schema:
+                  title: Job report not deleted
+                  type: string
+
+  /conversation/{jobID}:
+    get:
+      tags:
+      - Chat
+      summary: "Get chat messages log for a specific job"
+      operationId: messages.get_one
+      parameters:
+        - name: jobID
+          in: path
+          required: True
+          description: The ID of a respective job
+          schema:
+            type: integer  
+
+      responses:
+        "200":
+          description: "The chat messages for the specific job were found successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "404":
+          description: "Error: Could not found a job the chat messages for the specific job"
+          content:
+            text/plain:
+              schema:
+                title: Messages not found
+                type: string
+        "500":
+          description: "Internal Server Error: Chat messages not found for the specific job"
+          content:
+            text/plain:
+              schema:
+                title: Messages not found
+                type: string 
+
+    post:
+      tags:
+      - Chat
+      summary: "Create a new chat for a specific job"
+      operationId: messages.create_one
+      parameters:
+        - name: jobID
+          in: path
+          required: True
+          description: The ID of a respective job
+          schema:
+            type: integer  
+
+      responses:
+        "200":
+          description: "The chat for the specific job was created successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "404":
+          description: "Error: Could not create a chat for the specific job"
+          content:
+            text/plain:
+              schema:
+                title: Chat not created
+                type: string
+        "500":
+          description: "Internal Server Error: Chat not created for the specific job"
+          content:
+            text/plain:
+              schema:
+                title: Chat not created
+                type: string 
+
+    delete:
+      tags:
+      - Chat
+      summary: "Clear the chat messages log for a specific job"
+      operationId: messages.clear
+      parameters:
+        - name: jobID
+          in: path
+          required: True
+          description: The ID of a respective job
+          schema:
+            type: integer  
+            
+      responses:
+        "200":
+          description: "The messages in the chat of a specific job were delete successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "404":
+          description: "Error: Could not delete the messages in the chat of a specific job"
+          content:
+            text/plain:
+              schema:
+                title: Messages not deleted
+                type: string
+        "500":
+          description: "Internal Server Error: Chat messages not deleted for a specific job"
+          content:
+            text/plain:
+              schema:
+                title: Messages not deleted
+                type: string   
+
+
+  /conversation/{jobID}/{userID}:
+    put:
+      tags:
+      - Chat
+      summary: "Update/Send a message in the chat for a specific job"
+      operationId: messages.update
+      parameters:
+        - name: jobID
+          in: path
+          required: True
+          description: The ID of a respective job
+          schema:
+            type: integer 
+        - name: userID
+          in: path
+          required: True
+          description: ID of the user that are using the chat
+          schema:
+            type: integer        
+        - name: messages
+          in: query
+          required: True
+          description: Chat mensages log for a specific job
+          schema:
+            type: string 
+            
+      responses:
+        "200":
+          description: "The menssages in the chat of a specific job were updated/sent successfully!"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "404":
+          description: "Error: Could not update/sent a message in the chat of a specific job"
+          content:
+            text/plain:
+              schema:
+                title: Message not updated/sent
+                type: string
+        "500":
+          description: "Internal Server Error: Message not updated/sent in the of a specific job"
+          content:
+            text/plain:
+              schema:
+                title: Message not updated/sent
+                type: string      
+
+                
+components:
+  schemas:
+  
+    Building:
+      title: Building
+      description: "The information of each building"
+      type: "object"
+      properties:
+        buildingID:
+          type: integer
+          description: Identification number of the building
+        address:
+          type: string
+          description: Address where the building is located
+        supervisorUserID:
+          type: integer
+          description: The ID of the supervisor in this building
+   
+    Buildings:
+      title: Buildings
+      description: "A set buildings"
+      type: array
+      items:
+        $ref: '#/components/schemas/Building' 
+
+    Material:
+      title: Material
+      description: Job materials
+      type: "object"
+      properties:
+        materialID:
+          type: integer
+          description: Material identification number
+        name: 
+          type: string
+          description: Material name
+        stock:
+          type: integer
+          description: Number of stock
+        providerName:
+          type: string
+          description: Organization that provides the materials
+        materialClass:
+          description: Class of material
+          example: Painting
+ 
+    Materials:
+      title: Materials
+      description: "A set of materials"
+      type: array
+      items:
+        $ref: '#/components/schemas/Material'
+        
+    Job:
+      title: Job
+      description: "Information about a particular job"
+      type: "object"
+      properties:
+        jobID:
+          type: integer
+          description: Identification number of the job
+        buildingID:
+          type: integer
+          description: Identification number of the building  which the job is associated  
+        jobType:
+          type: string
+          description: Describes the type of work that are being performed in the job 
+          example: Painting
+        status:
+          type: string
+          description: Status of the job
+          example: openJobs / scheduledJobs / ongoingJobs /doneJobs / closedJobs
+        startDate:
+          type: string
+          format: date-time
+          description: Date and hour that the job started
+        deadline:
+          type: string
+          format: date-time
+          description: Estimated date for the job to be completed        
+        endDate:
+          type: string
+          format: date-time
+          description: Date and hour that the job ended         
+        buildingFloor:
+          type: string
+          description: Describes in which floor of the building the job are being performed 
+          example: 3rd Floor
+        buildingRoom:
+          type: string
+          description: Describes in which room in a specific floor of the building the job are being performed 
+          example: Kitchen
+        managerID:
+          type: integer
+          description: The ID of the job manager      
+        contractorIDs:
+          type: object
+          description: List of contractors user IDs working in this job
+        subcontractorIDs:
+          type: object
+          description: List of subcontractors user IDs working in this job
+        userIDs:
+          type: object
+          description: List of workers user IDs working in this job
+        materialIDs:
+          type: object
+          description: List of materials used in this job            
+        
+        
+    Jobs:
+      title: Jobs
+      description: "A set of jobs"
+      type: array
+      items:
+        $ref: '#/components/schemas/Job'
+
+    Report:
+      title: Report
+      description: "The information of each report"
+      type: "object"
+      properties:
+        reportID:
+          type: integer
+          description: Identification number of the report
+        jobID:
+          type: integer
+          description: The ID of the job
+        userID:
+          type: integer
+          description: Identification number of the user
+        date:
+          type: string
+          format: date-time
+          description: Date and hour of the reportID created  
+        content:
+          type: string
+          description: Information of the report          
+          
+    Reports:
+      title: Reports
+      description: "A set of reports for each job"
+      type: array
+      items:
+        $ref: '#/components/schemas/Report' 
+
+    User:
+      title: User
+      description: "User profile information"
+      type: "object"
+      properties:
+          userID:
+            type: integer
+            description: Identification number of the user
+          name:
+            type: string
+            description: Full name of the user
+            example: "John Burton"
+          role:
+            type: string
+            description: Role of the user in the job
+            example: Supervisor / Contractor / Subcontractor / Manager / Worker
+          phone:
+            type: integer
+            description: Phone number of the user
+          address:
+            type: string
+            description: User address         
+          taxID:
+            type: integer
+            description:  User Taxpayer Identification Number
+          payment_number:
+            type: string
+            description: User payment card number            
+          startDate:
+            type: string
+            format: date-time
+            description: Date and hour that user started working in BIT          
+          endDate:
+            type: string
+            format: date-time
+            description: Date and hour that user stoped working in BIT 
+
+
+    Users:
+      title: Users
+      description: "A set of users"
+      type: array
+      items:
+        $ref: '#/components/schemas/User' 
+        
+    Authentication:
+      title: Authentication
+      description: "Information about a particular user authentication"
+      type: "object"
+      properties:
+        userID:
+          type: integer
+          description: Identification number of the user
+        password:
+          type: string
+          description: Password of the user for log in the app  
+        email:
+          type: string
+          description: Email of the user for recovering the password 
+        phone number:
+          type: string
+          description: Phone number of the user for recovering the password
+    
+    Chat:
+      title: Chat
+      description: "Chat in each job"
+      type: "object"
+      properties:
+        jobID:
+          type: integer
+          description: Identification number of the job
+        userID:
+          type: integer
+          description: ID of the user that are using the chat           
+        messages:
+          type: string
+          description: Chat mensages log for a specific job
+          
+            
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+        
+security:
+  - BasicAuth: []       
+
+    
