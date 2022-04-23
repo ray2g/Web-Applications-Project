@@ -10,7 +10,7 @@ Team:
 Oriented by: Professor Pedro Antunes
 
 <br>
-
+## Project Specification
 Projects that have been developed in the Web Applications curricular unit at FCUL, with the following guidelines:
 
 <br>
