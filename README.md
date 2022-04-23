@@ -5,6 +5,6 @@
 
 Repository to compile all the projects that have been developed in the Adanved Machine Learning curricular unit at FCUL.
 
-<img src="https://imgur.com/a/W5Vu59y">
+<img src="https://imgur.com/9tAdA4V">
 
 <img src="https://imgur.com/a/DwPuwdw">
